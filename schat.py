@@ -11,11 +11,12 @@ def send_message(message):
 
 @socketio.on('json')
 def handle_json(json):
+    emit('json', str(json), broadcast=True);
     print('received json: ' + str(json))
     return 'ok', 1
 
 
-@app.route('/test')
+@app.route('/chat')
 def hello_world():
     return render_template('index.html')
 
