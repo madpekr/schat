@@ -1,3 +1,5 @@
+
+
 function init_messages(data) {
     data.forEach(function (message) {
         add_message(message);
