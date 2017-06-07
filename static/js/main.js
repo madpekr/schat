@@ -3,10 +3,18 @@ function init_messages(data) {
         add_message(message);
     })
 }
-
+function striptags(content) {
+  var frag = document.createDocumentFragment();
+  var innerEl = document.createElement('div');
+  frag.appendChild(innerEl);
+  innerEl.innerHTML = content;
+  return frag.firstChild.innerText;
+}
 function add_message(message) {
-    var elem = '<div class="row message-bubble"><p class="text-muted hide">'+message.author+'</p> <p>'+message.text+'</p></div>';
-    $('#message_container').append($(elem));
+    var messageB = $('<div class="row message-bubble"></div>');
+    messageB.append($('<p class="text-muted hide">', { text:message.author}));
+    messageB.append($('<p>', { text:message.text}));
+    $('#message_container').append(messageB);
 }
 
 function send_message(message) {
@@ -15,13 +23,16 @@ function send_message(message) {
 }
 
 function on_send() {
-    if (!$('input[name=text]').val()) {
+    author = $('input[name=author]').val();
+    text = $('input[name=text]').val();
+
+    if (!text) {
         return false;
     }
 
     message = {
-        author: $('input[name=author]').val(),
-        text : $('input[name=text]').val()
+        author: author,
+        text : text
     }
 
     add_message(message);
