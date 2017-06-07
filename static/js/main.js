@@ -12,18 +12,18 @@ function striptags(content) {
 }
 function add_message(message) {
     var messageB = $('<div class="row message-bubble"></div>');
-    messageB.append($('<p class="text-muted hide">', { text:message.author}));
+    messageB.append($('<p class="text-muted hide">', { text:message.username}));
     messageB.append($('<p>', { text:message.text}));
     $('#message_container').append(messageB);
 }
 
 function send_message(message) {
     message.uid = socket.id;
-    socket.emit('json', JSON.stringify(message));
+    socket.send(JSON.stringify(message));
 }
 
 function on_send() {
-    author = $('input[name=author]').val();
+    username = $('input[name=username]').val();
     text = $('input[name=text]').val();
 
     if (!text) {
@@ -31,17 +31,18 @@ function on_send() {
     }
 
     message = {
-        author: author,
-        text : text
+        username: 'test',
+        text : text,
+        room: 'test',
     }
 
     add_message(message);
     send_message(message);
 
-    $('input[name=author]').val('');
+    $('input[name=username]').val('');
     $('input[name=text]').val('');
 }
-socket.on('json', function(message, data){
+socket.on('message', function(message, data){
     message = JSON.parse(message);
     if (message.uid !== socket.id) {
         add_message(message);
@@ -51,3 +52,7 @@ socket.on('json', function(message, data){
 
 
 $('#send_btn').on('click', on_send);
+
+$(document).ready(function() {
+    socket.emit('join', {'username': 'test', 'room':'test'});
+});
