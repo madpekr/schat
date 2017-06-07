@@ -5,15 +5,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'as21QASd@12eas'
 socketio = SocketIO(app)
 
+
 @socketio.on('message')
 def send_message(message):
     send(message)
 
+
 @socketio.on('json')
 def handle_json(json):
-    emit('json', str(json), broadcast=True);
-    print('received json: ' + str(json))
-    return 'ok', 1
+    emit('json', str(json), broadcast=True)
 
 
 @app.route('/chat')
